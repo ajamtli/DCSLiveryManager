@@ -226,8 +226,8 @@ class LiveryManager:
     liveryDirectories = []
     for root, files in extractedLiveryFiles.items():
       liveryName = root
-      if root != "\\":
-        liveryName = str.split(root,"\\")[-1]
+      if root != os.sep:
+        liveryName = str.split(root, os.sep)[-1]
       if len(liveryName):
         if self.is_valid_livery_directory(files):
           liverySize = self._get_size_of_extracted_livery_files(livery, extractPath, files)
@@ -295,12 +295,12 @@ class LiveryManager:
     copiedLiveries = []
     for install in installPaths:
       installPath = os.path.join(os.getcwd(), livery.destination, install)
-      installLivery = str.split(installPath, "\\")[-1]
+      installLivery = str.split(installPath, os.sep)[-1]
       for root, files in extractedLiveryFiles.items():
         if self.is_valid_livery_directory(files):
           rootLivery = livery.dcsuf.title
-          if root != "\\":
-            rootLivery = str.split(root, "\\")[-1]
+          if root != os.sep:
+            rootLivery = str.split(root, os.sep)[-1]
           if installLivery == rootLivery:
             if self._copy_livery_files(livery, extractPath, files, installPath):
               copiedLiveries.append(install)
