@@ -190,10 +190,13 @@ class LiveryManager:
     #else:
       #raise RuntimeError("Invalid path for removing existing extracted files: " + extractedRoot)
 
-  def extract_livery_archive(self, livery):
+  def extract_livery_archive(self, livery, local=None):
     if livery:
       if len(livery.archive):
-        archivePath = os.path.join(os.getcwd(), self.FolderRoot, "archives", livery.archive)
+        if local:
+          archivePath = livery.archive
+        else:
+          archivePath = os.path.join(os.getcwd(), self.FolderRoot, "archives", livery.archive)
         if os.path.isfile(archivePath):
           extractRoot = os.path.join(os.getcwd(), self.FolderRoot, "extract", str(livery.dcsuf.id))
           if not os.path.isdir(extractRoot):
