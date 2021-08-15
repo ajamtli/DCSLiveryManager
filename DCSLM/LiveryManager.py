@@ -199,7 +199,7 @@ class LiveryManager:
           if not os.path.isdir(extractRoot):
             os.makedirs(extractRoot, exist_ok=True)
           archiveFile = livery.archive
-          archiveFolder = os.path.splitext(archiveFile)[0].split('\\')[-1]
+          archiveFolder = os.path.splitext(archiveFile)[0].split(os.sep)[-1]
           extractedPath = os.path.join(extractRoot, archiveFolder)
           self._remove_existing_extracted_files(livery, extractedPath)
           self._extract_archive(livery, archivePath, extractedPath)
@@ -342,7 +342,7 @@ class LiveryManager:
   def generate_livery_install_paths(self, livery, installRoots, detectedLiveries):
     installPaths = []
     for dl in detectedLiveries:
-      if dl['name'] == "\\":
+      if dl['name'] == os.sep:
         dl['name'] = livery.dcsuf.title
       livery.installs['liveries'][dl['name']] = {'size': dl['size'], 'paths':[]}
       for root in installRoots:
@@ -471,9 +471,9 @@ class LiveryManager:
         liveryFiles[l].append(str.lower(lf))
     for t, l in livery.installs['liveries'].items():
       installRoot = os.path.join(os.getcwd(), livery.destination, l['paths'][0])
-      installedFiles = glob.glob(installRoot + "\\*.*")
+      installedFiles = glob.glob(installRoot + os.sep + "*.*")
       for iF in installedFiles:
-        splitPath = str.split(iF, "\\")
+        splitPath = str.split(iF, os.sep)
         if splitPath[-1] in skipFiles:
           continue
         splitLivery = splitPath[-2]
@@ -598,7 +598,7 @@ class LiveryManager:
           print("Removing the following unused files:")
           shortUnused = []
           for u in filesData['unused']:
-            shortUnused.append('\\'.join(str.split(u, "\\")[-2:]))
+            shortUnused.append(os.sep.join(str.split(u, os.sep)[-2:]))
           print(shortUnused)
         self._optimize_remove_unused_files(filesData['unused'])
         livery.calculate_size_installed_liveries()
