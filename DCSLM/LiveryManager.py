@@ -196,12 +196,12 @@ class LiveryManager:
         archivePath = os.path.join(os.getcwd(), self.FolderRoot, "archives", livery.archive)
         if os.path.isfile(archivePath):
           extractRoot = os.path.join(os.getcwd(), self.FolderRoot, "extract", str(livery.dcsuf.id))
-          if not os.path.isdir(extractRoot):
-            os.makedirs(extractRoot, exist_ok=True)
           archiveFile = livery.archive
           archiveFolder = os.path.splitext(archiveFile)[0].split(os.sep)[-1]
           extractedPath = os.path.join(extractRoot, archiveFolder)
           self._remove_existing_extracted_files(livery, extractedPath)
+          if not os.path.isdir(extractedPath):
+            os.makedirs(extractedPath, exist_ok=True)
           self._extract_archive(livery, archivePath, extractedPath)
           self._extract_extracted_archive(livery, extractedPath)
           return extractedPath
