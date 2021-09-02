@@ -310,6 +310,7 @@ class DCSLMApp:
                     self.lm.register_livery(livery)
                     self.console.print("[bold green]Livery[/bold green] \'" + str(livery.dcsuf.title) +
                                        "\' [bold green]Registered!")
+                    livery.calculate_size_installed_liveries()
                     installData['success'].append(livery)
                   else:
                     raise RuntimeError("Failed to copy livery files to install directories!")
@@ -372,6 +373,7 @@ class DCSLMApp:
     except SystemExit:
       raise RuntimeError("Unable to parse \'uninstall\' command.")
 
+  # TODO: Allow selection of multiple numbers when installed to units with choices
   def install_liveries(self, sArgs):
     installArgs = self._parse_install_args(sArgs)
     self.console.print("Attempting to install " + str(len(installArgs.url)) +
@@ -503,6 +505,8 @@ class DCSLMApp:
     self._print_livery_install_report(updateData, "Livery Update Report")
     self.console.print("")
 
+  # TODO: Show if livery is installed to multiple units
+  # TODO: Show if livery is optimized
   def list_liveries(self, sArgs):
     def sort_list_by_unit_then_title(e):
       return e[0] + " - " + e[1]
@@ -535,7 +539,7 @@ class DCSLMApp:
     statusTable.add_column("Unit", justify="center", no_wrap=True, style="green", width=unitColWidth)
     statusTable.add_column("ID", justify="center", no_wrap=True, style="sky_blue1", width=8)
     statusTable.add_column("Livery Title", justify="center", no_wrap=True, overflow='ellipsis')
-    statusTable.add_column("Size", justify="right", no_wrap=True, style="bold gold1", width=10)
+    statusTable.add_column("Size (MB)", justify="right", no_wrap=True, style="bold gold1", width=10)
     liveryRows.sort(key=sort_list_by_unit_then_title)
     for i in range(0, len(liveryRows)):
       l = liveryRows[i]
